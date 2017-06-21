@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Form Builder</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="style.css">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script>
+	
+<!--
+-Name         : Faisal Arisandi Pratama
+-Project name : Djavaweb Screening Test 2 : Form Builder
+-->
+</head>
+<body ng-app="formBuilder" class="bg-success">
+<div class="container" ng-controller="formController">
+	<div class="row">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+			<br>
+			<!--Form Builder created inside Boostrap panel-->
+			<div class="panel panel-info">
+				<!--Panel header-->
+				<div class="panel-heading">
+					<h1 class="text-center">Djavaweb Form Builder</h1>
+				</div>
+				<!--Panel body for group of buttons-->
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-3"></div>
+						<div class="col-md-6">
+							<div class="btn-group btn-group-justified">
+								<div class="btn-group" role="group">
+									<button data-toggle="tab" type="button" class="btn btn-default" href="#edit">Edit</button>
+								</div>
+								<div class="btn-group" role="group">
+									<button data-toggle="tab" type="button" class="btn btn-default" href="#preview">Preview</button>
+								</div>
+								<div class="btn-group" role="group">
+									<button data-toggle="tab" type="button" class="btn btn-default" href="#print">JSON</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+				</div>
+				<!--Panel body for edit form-->
+				<div class="panel-body">
+					<div class="tab-content">
+						<div id="edit" class="tab-pane fade in active">
+							<div>
+								<div class="well" ng-repeat="list in listInput">
+									<div class="row">
+										<!--Input section : label-->
+										<div class="col-md-11">
+											<input class="label-transparent" ng-model="list.label">
+										</div>
+										<!--Input section : place for selecting option type-->
+										<div class="col-md-1">
+											<select class="pull-right" ng-model="list.type">
+												<option ng-repeat="item in listInputType" ng-value="item.type" ng-click="onSelectedInput(list)">{{item.name}}</option>
+											</select>
+										</div>
+										<div class="clearfix"></div>
+										<!--Input section : -->
+										<div class="col-md-10">
+											<!--Input section : place for multiple input items-->
+											<div class="" ng-switch="list.type">
+												<!--Input-->
+												<div ng-switch-default="text">
+													<input class="text-wide" type="text" name="input" ng-model="list.value">
+												</div>
+												<!--Dropdown-->
+												<div ng-switch-when="dropdown">
+													<ol>
+														<li class="selected" ng-repeat="itemDropdown in list.value track by $index">
+														<input class="input-transparent" type="text" ng-model="list.value[$index]">
+															<!--Group of buttons for adding / removing dropdown item-->
+															<div class="pull-right">
+																<div class="btn-group btn-group-xs" role="group">
+																	<!--Button for adding new dropdown item-->
+																	<a title="Add item" class="icon-small icon-hide" ng-click="addDropdown(list)">
+																		<span class="glyphicon glyphicon-plus"></span>
+																	</a>
+																	<!--Button for removing current dropdown item-->
+																	<a title="Remove item" class="icon-small icon-hide" ng-click="removeDropdown(list,itemDropdown)">
+																		<span class="glyphicon glyphicon-minus"></span>
+																	</a>
+																</div>
+															</div>
+															<div class="clearfix"></div>
+														</li>
+													</ol>
+												</div>
+												<!--Radio boxes or button-->
+												<div ng-switch-when="radio">
+													<div class="selected" ng-repeat="itemRadioButton in list.value track by $index">
+														<input class="multichoice" type="radio" name="radio" value="radio1">
+														<input class="input-transparent" type="text" ng-model="list.value[$index]"> 
+														<!--Group of buttons for adding / removing radio button item-->
+														<div class="pull-right">
+															<div class="btn-group btn-group-xs" role="group">
+																<!--Button for adding new radio button item-->
+																<a title="Add item" class="icon-small icon-hide" ng-click="addRadioButton(list)">
+																	<span class="glyphicon glyphicon-plus"></span>
+																</a>
+																<!--Button for removing current radio button item-->
+																<a title="Remove item" class="icon-small icon-hide" ng-click="removeRadioButton(list,itemRadioButton)">
+																	<span class="glyphicon glyphicon-minus"></span>
+																</a>
+															</div>
+														</div>
+														<div class="clearfix"></div>
+													</div>
+												</div>
+												<!--Checkboxes-->
+												<div ng-switch-when="checkbox">
+													<div class="selected" ng-repeat="itemCheckbox in list.value track by $index">
+														<input class="multichoice" type="checkbox" name="checkbox" value="checkbox1">
+														<input class="input-transparent" type="text" ng-model="list.value[$index]">
+														<!--Group of buttons for adding / removing checkbox item-->
+														<div class="pull-right">
+															<div class="btn-group btn-group-xs" role="group">
+																<!--Button for adding new checkbox item-->
+																<a title="Add item" class="icon-small icon-hide" ng-click="addCheckbox(list)">
+																	<span class="glyphicon glyphicon-plus"></span>
+																</a>
+																<!--Button for removing current checkbox item-->
+																<a title="Remove item" class="icon-small icon-hide" ng-click="removeCheckbox(list,itemCheckbox)">
+																	<span class="glyphicon glyphicon-minus"></span>
+																</a>
+															</div>
+														</div>
+													</div>
+												</div>
+												<!--Paragraph or textarea-->
+												<div ng-switch-when="textarea">
+													<textarea class="text-wide"></textarea>
+												</div>
+											</div>
+										</div>
+										<!--Input section : Group of button for cloning / removing input-->
+										<div class="col-md-2">
+											<div class="pull-right">
+											<!--Button for cloning input-->
+											<button title="Clone Input" class="btn btn-default" ng-click="cloneInput(list, list.type)">
+												<span class="glyphicon glyphicon-file"></span>
+											</button>
+											<!--Button for removing input-->
+											<button title="Remove Input" class="btn btn-default" ng-click="removeInput(list)">
+												<span class="glyphicon glyphicon-trash"></span>
+											</button>
+											</div>
+										</div>
+										<div class="clearfix"></div>
+									</div>
+									<br>
+									<!--Input section : Button for adding new input-->
+									<button title="Add New" class="center-block" ng-click="addInput(list)">
+										<span class="glyphicon glyphicon-plus"></span>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div id="preview" class="tab-pane fade">
+						    <div class="well" ng-repeat="list in listInput">
+								<div class="row">
+									<!--Input preview : label-->
+									<div class="col-md-3">
+										<label>{{list.label}}</label>
+									</div>
+									<!--Input preview : -->
+									<div class="col-md-8">
+										<!--Input preview : place for multiple input items-->
+										<div class="" ng-switch="list.type">
+											<!--Preview : Input-->
+											<div ng-switch-when="text">
+												<input class="text-wide" type="text" name="input">
+											</div>
+											<!--Dropdown-->
+											<div ng-switch-when="dropdown">
+												<div class="selected result" ng-repeat="itemDropdown in list.value track by $index">
+													<span>(</span>{{$index+1}}<span>).</span> {{itemDropdown}}<span>, </span>
+												</div>
+												<!--<ol>
+													<li class="selected result" ng-repeat="itemDropdown in list.value track by $index">
+													{{itemDropdown}}
+													</li>
+												</ol>-->
+											</div>
+											<!--Radio boxes or button-->
+											<div ng-switch-when="radio">
+												<div class="selected result" ng-repeat="itemRadioButton in list.value track by $index">
+													<input class="multichoice" type="radio" name="radio" value="radio1">
+													{{itemRadioButton}} 
+												</div>
+											</div>
+											<!--Checkboxes-->
+											<div ng-switch-when="checkbox">
+												<div class="selected result" ng-repeat="itemCheckbox in list.value track by $index">
+													<input class="multichoice" type="checkbox" name="checkbox" value="checkbox1">
+													{{itemCheckbox}}														
+												</div>
+											</div>
+											<!--Paragraph or textarea-->
+											<div ng-switch-when="textarea">
+												<textarea class="text-wide"></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="print" class="tab-pane fade">
+						    <pre>{{listInput | json}}</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-2"></div>
+	</div>
+</div>
+
+<script src="builder-controller.js"></script>
+</body>
+</html>
