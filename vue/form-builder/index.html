@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Test Vue</title>
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css">
+	<!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script> -->
+	<script src="js/jquery-3.1.1.js"></script>
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/vue.js"></script>
+	
+</head>
+<body>
+<div id="app" class="container">
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<!--Form Builder created inside Bootstrap panel-->
+			<div class="panel no-border">
+				<!--Panel Header-->
+				<div class="panel-heading header-color">
+					<h1 class="text-center">
+						<span class="glyphicon glyphicon-list-alt"></span>
+						Djavaweb Form Generator
+					</h1>
+				</div>
+
+				<!--Panel Body for group of buttons-->
+				<div class="panel-body subheader-color">
+					<div class="btn-group-center">
+						<button data-toggle="tab" type="button" class="btn btn-style1" href="#edit">
+							<span class="glyphicon glyphicon-pencil"></span> Edit
+						</button>
+						<button data-toggle="tab" type="button" class="btn btn-style1" href="#preview">
+							<span class="glyphicon glyphicon-eye-open"></span> Preview
+						</button>
+						<button data-toggle="tab" type="button" class="btn btn-style1" href="#print">
+							<span class="glyphicon glyphicon-cd"></span> JSON
+						</button>
+					</div>
+				</div>
+
+				<!--Panel Body for edit form-->
+				<div class="panel-body">
+					<div class="tab-content">
+						<div id="edit" class="tab-pane fade in active">
+							<div v-for="(list, indexInput) in listInput">
+								<div class="pull-left">
+									<input class="label-transparent" v-model="listInput[indexInput].label">
+								</div>
+								<!--Input section : place for selecting option type-->
+								<div class="pull-right">
+									<!--Dropdown menu for selecting input type-->
+									<select v-model="listInput[indexInput].type" v-on:change="checkSelection(indexInput, list.type)">
+										<option v-for="option in options" :value="option.type" >
+											{{option.name}}
+										</option>
+									</select>
+								</div>
+								<div class="clearfix"></div>
+
+								<div class="spacing-style1 border-style1 clearfix">
+									<div class="pull-left input-width">
+										<!--Input-->
+										<template v-if="listInput[indexInput].type === 'text' ">
+											<input class="text-wide" type="text" name="input" v-model="listInput[indexInput].value"></input>
+										</template>
+										<!--Dropdown-->
+										<template v-else-if="listInput[indexInput].type === 'dropdown' ">
+											<ol>
+												<li class="selected" v-for="(item, indexDropdown) in list.value">
+													<input class="input-transparent border-style2" type='text' v-model="listInput[indexInput].value[indexDropdown]">
+													<div class="pull-right">
+														<!--Button for adding new dropdown item-->
+														<button title="Add item" class="btn btn-style3 icon-hide" v-on:click="addItem(indexInput, indexDropdown)">
+															<span class="glyphicon glyphicon-plus"></span>
+														</button>
+														<!--Button for removing current dropdown item-->
+														<button title="Remove item" class="btn btn-style3 icon-hide" v-on:click="removeItem(indexInput, indexDropdown)">
+															<span class="glyphicon glyphicon-minus"></span>
+														</button>
+													</div>
+												</li>
+											</ol>
+											
+										</template>
+										<!--Radioboxes-->
+										<template v-else-if="listInput[indexInput].type === 'radio' ">
+											<div class="selected" v-for="(item, indexRadio) in list.value">
+												<input type="radio" name="radio" value="radio1">
+												<input class="input-transparent border-style2" type="text" v-model="listInput[indexInput].value[indexRadio]">
+												<div class='pull-right'>
+													<!--Button for addding new radio button item-->
+													<button title="Add item" class="btn btn-style3 icon-hide" v-on:click="addItem(indexInput, indexRadio)">
+														<span class="glyphicon glyphicon-plus"></span>
+													</button>
+													<!--Button for removing current radio button item-->
+													<button title="Remove item" class="btn btn-style3 icon-hide" v-on:click="removeItem(indexInput, indexRadio)">
+														<span class="glyphicon glyphicon-minus"></span>
+													</button>
+												</div>
+											</div>
+										</template>
+										<!--Checkboxes-->
+										<template v-else-if="listInput[indexInput].type === 'checkbox' ">
+											<div class="selected" v-for="(item, indexCheckbox) in list.value">
+												<input type="checkbox" name="checkbox" value="checkbox1">
+												<input class="input-transparent border-style2" type="text" v-model="listInput[indexInput].value[indexCheckbox]">
+												<div class="pull-right">
+													<!--Button for adding new checkbox item-->
+													<button title="Add item" class="btn btn-style3 icon-hide" v-on:click="addItem(indexInput, indexCheckbox)">
+														<span class="glyphicon glyphicon-plus"></span>
+													</button>
+													<!--Button for removing current checkbox item-->
+													<button title="Remove item" class="btn btn-style3 icon-hide" v-on:click="removeItem(indexInput, indexCheckbox)">
+														<span class="glyphicon glyphicon-minus"></span>
+													</button>
+												</div>
+											</div>
+										</template>
+										<!--Paragraph-->
+										<template v-else>
+											<textarea class="text-wide" v-model="listInput[indexInput].value"></textarea>
+										</template>
+									</div>
+								
+
+									<div class="pull-right">
+										<button title="Clone Input" class="btn btn-style2" v-on:click="buttonClone(indexInput)">
+											<span class="glyphicon glyphicon-file"></span>
+										</button>
+										<!--Button for removing input-->
+										<button title="Remove Input" class="btn btn-style2" v-on:click="buttonRemove(indexInput)">
+											<span class="glyphicon glyphicon-trash"></span>
+										</button>
+									</div>
+								</div>
+								<div class="btn-center">
+									<button title="Add New" class="btn btn-style3" v-on:click="buttonAdd(indexInput)">
+										<span class="glyphicon glyphicon-plus"></span>
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<div id="preview" class="tab-pane fade">
+							<div v-for="(list, indexInput) in listInput">
+								<div class="row spacing-style2">
+									<!--Input Preview ; Label-->
+									<div class="col-md-3">
+										<label>{{list.label}} </label>
+									</div>
+									<!--Input Preview : Item-->
+									<div class="col-md-8">
+										<!--Input Preview : place for multiple input items-->
+										<!--Input-->
+										<template v-if="list.type === 'text' ">
+											<input class="text-wide" type="text" name="input" v-model="listInput[indexInput].value"></input>
+										</template>
+										<!--Dropdown-->
+										<template v-else-if="list.type === 'dropdown' ">
+											<select>
+												<option v-for="item in list.value" >
+													{{item}}
+												</option>
+											</select>
+										</template>
+										<!--Radioboxes-->
+										<template v-else-if="list.type === 'radio' ">
+											<div class="selected result" v-for="(item, indexRadio) in list.value">
+												<input type="radio" name="radio" value="radio1">
+												{{item}}
+											</div>
+										</template>
+										<!--Checkboxes-->
+										<template v-else-if="list.type === 'checkbox' ">
+											<div class="selected result" v-for="(item, indexCheckbox) in list.value">
+												<input type="checkbox" name="checkbox" value="checkbox1">
+												{{item}}
+											</div>
+										</template>
+										<!--Paragraph-->
+										<template v-else>
+											<textarea class="text-wide" v-model="list.value"></textarea>
+										</template>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--Print JSON-->
+						<div id="print" class="tab-pane fade">
+							<pre>{{JSON.parse(JSON.stringify(listInput))}}</pre>
+							<!-- <pre>{{listInput | JSON}}</pre> -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+</div>
+
+<script src="js/control.js"></script>
+</body>
+</html>
