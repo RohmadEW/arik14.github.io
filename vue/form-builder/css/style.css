@@ -49,9 +49,13 @@ body {
 	padding: 0;
 }
 
-.btn-style1:hover {
+.btn-style1:focus {
 	color: white ;
 	background-color: #00bfff;
+}
+
+.btn-style2:focus, .btn-style3:focus {
+	outline: none;
 }
 
 .spacing-style1 {
