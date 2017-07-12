@@ -1,41 +1,51 @@
 <template>
-  <div id="app">
-    <todo-list v-bind:todos="todos"></todo-list>
-    <create-todo v-on:create-todo="createTodo"></create-todo>
+  <div id="app" class="container">
+    <div class="page-header">
+      <h1>Vue.js Todo App</h1>
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <todo-list v-bind:todos="todos"></todo-list>
+          <create-todo v-on:create-todo="createTodo"></create-todo>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+
 import sweetalert from 'sweetalert';
 import TodoList from './components/TodoList';
 import CreateTodo from './components/CreateTodo';
 
 export default {
-  name: 'app',
-  components: {
-    TodoList,
-    CreateTodo
-  },
-  data() {
-    return {
-      todos: [{
-        title: 'Todo A',
-        project: 'Project A',
-        done: false
+	name: 'app',
+	components: {
+	   TodoList,
+     CreateTodo
+	},
+	data() {
+		return {
+		  todos: [{
+			   title: 'Todo A',
+			   project: 'Project A',
+			   done: false,
       }, {
-        title: 'Todo B',
-        project: 'Project B',
-        done: true
+          title: 'Todo B',
+          project: 'Project B',
+          done: true,
       }, {
-        title: 'Todo C',
-        project: 'Project C',
-        done: false
+          title: 'Todo C',
+          project: 'Project C',
+          done: false,
       }, {
-        title: 'Todo D',
-        project: 'Project D',
-        done: false
-      }]
-    }
+          title: 'Todo D',
+          project: 'Project D',
+          done: false,
+      }],
+    };
   },
   methods: {
     createTodo(newTodo) {
@@ -43,7 +53,8 @@ export default {
       sweetalert('Success!', 'Todo created!', 'success');
     }
   }
-}
+};
+
 </script>
 
 <style>

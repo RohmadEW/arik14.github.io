@@ -1,20 +1,29 @@
 <template>
-	<div class="ui basic content center aligned segment">
-		<button class="ui basic button icon" v-on:click="openForm" v-show="!isCreating">Add</button>
-		<div class="ui centered card" v-show="isCreating">
-			<div class="content">
-				<div class="ui form">
-					<div class="field">
-						<label>Title</label>
-						<input v-model="titleText" type="text" ref="title" defaultValue="">
-					</div>
-					<div class="field">
-						<label>Project</label>
-						<input v-model="projectText" type="text" ref="project" defaultValue="">
-					</div>
-					<div class="ui two button attached buttons">
-						<button class="ui basic blue button" v-on:click="sendForm()">Create</button>
-						<button class="ui basic red button" v-on:click="closeForm">Cancel</button>
+	<div class="">
+		<button class="btn btn-default" data-toggle="modal" data-target="#myModal" v-on:click="openForm" v-show="!isCreating">
+			Add
+		</button>
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" v-show="isCreating">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header"></div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<label>Title</label>
+								<input class="form-control" v-model="titleText" type="text">
+							</div>
+							<div class="form-group">
+								<label>Project</label>
+								<input class="form-control" v-model="projectText" type="text">
+							</div>
+							<button class="btn btn-default" data-dismiss="modal" v-on:click="sendForm">
+								Create
+							</button>
+							<button class="btn btn-default" data-dismiss="modal" v-on:click="closeForm">
+								Cancel
+							</button>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -35,10 +44,12 @@ export default {
 		openForm() {
 			this.isCreating = true;
 		},
-		closeForm() {
+		closeForm(e) {
+			e.preventDefault();
 			this.isCreating = false;
 		},
-		sendForm() {
+		sendForm(e) {
+			e.preventDefault();
 			if (this.titleText.length > 0 && this.projectText.length > 0) {
 				const title = this.titleText;
 				const project = this.projectText;
@@ -47,10 +58,10 @@ export default {
 					project,
 					done: false
 				});
+				this.titleText = '';
+				this.projectText = '';
+				this.isCreating = false;
 			}
-			this.titleText = '';
-			this.projectText = '';
-			this.isCreating = false;
 		}
 	}
 }
